@@ -1,6 +1,6 @@
-import 'package:despesas_pessoais/models/transaction.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import '../models/transaction.dart';
 
 class TransactionList extends StatelessWidget {
   final List<Transaction> transactions;
@@ -41,7 +41,9 @@ class TransactionList extends StatelessWidget {
     : ListView.builder(
       shrinkWrap: true,
       itemCount: transactions.length,
+      physics: NeverScrollableScrollPhysics(),
       itemBuilder: (context, index) {
+        print(MediaQuery.of(context).size.width);
         final transaction = transactions[index];
           return Card(
             elevation: 5,
@@ -64,12 +66,15 @@ class TransactionList extends StatelessWidget {
                 style: Theme.of(context).textTheme.headline6
               ),
               subtitle: Text(DateFormat('d MMM y').format(transaction.date)),
-              trailing: IconButton(
-                color: Theme.of(context).errorColor,
-                icon: const Icon(Icons.delete),
-                onPressed: (){
-                  removeTransaction(transaction.id);
-                }),
+              trailing: MediaQuery.of(context).size.width < 412
+              ?  IconButton(
+                  color: Theme.of(context).errorColor,
+                  icon: const Icon(Icons.delete),
+                  onPressed: (){
+                    removeTransaction(transaction.id);
+                  }
+                )
+              : TextButton(onPressed: () {} ,child: const Text("Excluir"))
             ),
           );
       },

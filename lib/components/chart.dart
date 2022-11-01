@@ -1,7 +1,9 @@
-import 'package:despesas_pessoais/components/chart_bar.dart';
-import 'package:despesas_pessoais/models/transaction.dart';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
+import '../models/transaction.dart';
+import '../components/chart_bar.dart';
 
 class Chart extends StatelessWidget {
   const Chart({required this.recentTransaction ,super.key});
@@ -25,6 +27,7 @@ class Chart extends StatelessWidget {
       }
     }
     print(DateFormat.E().format(weekDay)[0]);
+    
     print(totalSum);
 
     return {
