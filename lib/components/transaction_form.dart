@@ -1,4 +1,6 @@
 import 'package:despesas_pessoais/components/adaptative_button.dart';
+import 'package:despesas_pessoais/components/adaptative_datepicker.dart';
+import 'package:despesas_pessoais/components/adaptative_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -23,19 +25,6 @@ class _TransactionFormState extends State<TransactionForm> {
     widget.onSubmitted(titleController.text, double.parse(valueController.text), selectedDate);
   }
 
-  buildShowDatePicker() async{
-    showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2019),
-      lastDate: DateTime.now()
-    ).then(((pickedDate){
-          if(pickedDate == null){return;}
-          setState(() {selectedDate = pickedDate;});
-        }
-      ));
-  }
-
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -44,34 +33,21 @@ class _TransactionFormState extends State<TransactionForm> {
         margin: EdgeInsets.fromLTRB(8, 8, 8, 10 + MediaQuery.of(context).viewInsets.bottom),
         child: Column(
           children: [
-            TextField(
+            AdaptativeTextField(
               controller: titleController,
-              decoration: const InputDecoration(labelText: "Título"),
-              onSubmitted: (_) => submitForm(),
+              label: "Título", 
+              textInputType: TextInputType.name
             ),
-            TextField(
+            AdaptativeTextField(
               controller: valueController,
-              decoration: const InputDecoration(labelText: "Valor(R\$)"),
-              keyboardType: const TextInputType.numberWithOptions(decimal: true),
-              onSubmitted: (_) => submitForm(),
+              label: "Valor (R\$)", 
+              textInputType: const TextInputType.numberWithOptions(decimal: true)
             ),
-            SizedBox(
-              height: 70,
-              child: Row(
-                children: [
-                   Expanded(
-                     child: Text("Data selecionada: ${DateFormat("dd/MM/y").format(selectedDate)}"
-                      ),
-                   ),
-                  TextButton(
-                    onPressed: (){buildShowDatePicker();}, 
-                    child: const Text("Selecionar data", 
-                    style: TextStyle(
-                      fontWeight: FontWeight.w700
-                    ),)
-                  ),
-                ],
-              ),
+            AdaptativeDatePicker(
+              selectedDate: selectedDate,
+              onDate:(newDate){
+                setState(() => selectedDate = newDate);
+              }
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,

@@ -20,13 +20,14 @@ class AdaptativeButton extends StatelessWidget {
         onPressed: (() => onPressed()),
         color: Colors.purple,
         padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 6),
-        child: Text(label, style: const TextStyle(fontSize: 15),),
+        child: Text(label, style: const TextStyle(fontSize: 15)
+      ),
     )
     : ElevatedButton(
       style: ElevatedButton.styleFrom(
         textStyle: TextStyle(color: Theme.of(context).textTheme.button!.color),
-        backgroundColor: Theme.of(context).primaryColor),
-      onPressed: onPressed(),
+        backgroundColor: Colors.purple),
+        onPressed: (() => onPressed()),
       child: Text(label),
     );
   }
