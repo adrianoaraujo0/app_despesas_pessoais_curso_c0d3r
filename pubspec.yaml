@@ -14,11 +14,11 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.2
-  intl: ^0.17.0
   rxdart: ^0.26.0
   flutter_masked_text2: ^0.9.1
   sqflite: ^2.1.0+1
   fl_chart: ^0.55.2
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:
