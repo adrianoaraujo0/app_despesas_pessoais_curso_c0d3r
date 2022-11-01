@@ -90,6 +90,7 @@ class _MyHomePageState extends State<MyHomePage> {
     
   }
 
+
   final appBar = AppBar();
 
   @override
@@ -100,43 +101,31 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: const Text('Despesas Pessoais'),
         actions: <Widget>[
+         if(isLandscape) 
           IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: () => openTransactionFormModal(context),
-          ),
+            icon: _showChart ? const Icon(Icons.list) : const Icon(Icons.bar_chart),
+            onPressed: (() {
+              setState(() => _showChart = !_showChart);
+            }),
+          )
         ],
       ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-           isLandscape 
-           ? Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text("Exibir gráfico:"),
-                Switch(
-                  value: _showChart, 
-                  onChanged: (value) {
-                    setState(() {
-                      _showChart = value;
-                    });
-                  },
-                )
-              ] 
-            )
-            : Container(),
-            if(_showChart || !isLandscape )
-              Container(
-              height: (MediaQuery.of(context).size.height * (isLandscape ? 0.60 : 0.30)),
-              child: Chart(recentTransaction: recentTransactions)
-            ),
-            if(!_showChart|| !isLandscape)
-              Container(
-              height: (MediaQuery.of(context).size.height  - MediaQuery.of(context).padding.top) * 0.70,
-              child: TransactionList(transactions: transactions, removeTransaction: removeTransaction,)
-            ),
-          ],
+            Container(),
+              if(_showChart || !isLandscape )
+                Container(
+                height: (MediaQuery.of(context).size.height * (isLandscape ? 0.60 : 0.30)),
+                child: Chart(recentTransaction: recentTransactions)
+              ),
+              if(!_showChart|| !isLandscape)
+                Container(
+                height: (MediaQuery.of(context).size.height  - MediaQuery.of(context).padding.top) * 0.70,
+                child: TransactionList(transactions: transactions, removeTransaction: removeTransaction,)
+              ),
+            ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
