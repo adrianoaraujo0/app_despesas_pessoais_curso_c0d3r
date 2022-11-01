@@ -1,3 +1,4 @@
+import 'package:despesas_pessoais/components/adaptative_button.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -16,7 +17,7 @@ class _TransactionFormState extends State<TransactionForm> {
   final TextEditingController titleController = TextEditingController();
   DateTime selectedDate = DateTime.now();
 
-  submitForm(){
+  void submitForm(){
     if(valueController.text.isEmpty || titleController.text.isEmpty ){return;}
 
     widget.onSubmitted(titleController.text, double.parse(valueController.text), selectedDate);
@@ -75,12 +76,8 @@ class _TransactionFormState extends State<TransactionForm> {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                ElevatedButton(
-                    onPressed: submitForm,
-                    child: const Text(
-                      "Nova transação",
-                      style: TextStyle(color: Colors.white),
-                    )),
+                AdaptativeButton(onPressed: submitForm, label: "Nova transação"),
+               
               ],
             )
           ],
