@@ -27,6 +27,7 @@ class _TransactionFormState extends State<TransactionForm> {
 
   @override
   Widget build(BuildContext context) {
+    print("TransactionForm");
     return SingleChildScrollView(
       child: Card(
         elevation: 0,
@@ -53,7 +54,6 @@ class _TransactionFormState extends State<TransactionForm> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 AdaptativeButton(onPressed: submitForm, label: "Nova transação"),
-               
               ],
             )
           ],

@@ -91,81 +91,96 @@ class _MyHomePageState extends State<MyHomePage> {
     });
     
   }
+  
+//BUILD
+@override
+Widget build(BuildContext context) { print("ExpensesApp");
+  bool isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
+
+  return Platform.isIOS
+    ? cupertinoScaffold(isLandscape, bodyPage(isLandscape))
+    : scaffold(isLandscape);
+}
 
 
-  final appBar = AppBar();
 
-  @override
-  Widget build(BuildContext context) {
-    bool isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
+ Widget bodyPage(bool isLandscape){
+     return SafeArea(child: singleChildScrollView(isLandscape));
+ }
 
-    final bodyPage = SafeArea(
-      child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              Container(),
-                if(_showChart || !isLandscape )
-                  SizedBox(
-                  height: (MediaQuery.of(context).size.height * (isLandscape ? 0.70 : 0.30)),
-                  child: Chart(recentTransaction: recentTransactions)
-                ),
-                if(!_showChart|| !isLandscape)
-                  SizedBox(
-                  height: MediaQuery.of(context).size.height * (isLandscape ? 1 : 0.70),
-                  child: TransactionList(transactions: transactions, removeTransaction: removeTransaction,)
-                ),
-              ],
-          ),
-       ),
+Widget singleChildScrollView(bool isLandscape){
+  return SingleChildScrollView(
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children:[
+        if(_showChart || !isLandscape )
+          SizedBox(
+          height: (MediaQuery.of(context).size.height * (isLandscape ? 0.70 : 0.30)),
+          child: Chart(recentTransaction: recentTransactions)
+        ),
+        if(!_showChart|| !isLandscape)
+          SizedBox(
+          height: MediaQuery.of(context).size.height * (isLandscape ? 1 : 0.70),
+          child: TransactionList(transactions: transactions, removeTransaction: removeTransaction,)
+        ),
+      ],
+    ),
+  );
+}
+
+ Widget cupertinoScaffold(bool isLandscape, Widget bodyPage){
+    return  CupertinoPageScaffold(
+      navigationBar: cupertinoNavigationBar(isLandscape),
+      child: bodyPage
     );
+  }
 
-
-    return Platform.isIOS
-      ?CupertinoPageScaffold(
-        navigationBar: 
-           CupertinoNavigationBar(
-            middle: const Text('Despesas Pessoais', style: TextStyle(color: Colors.black),),
-            trailing: 
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  isLandscape 
-                  ? GestureDetector(
-                    onTap:(() => setState(() => _showChart = !_showChart)),
-                    child: _showChart ? const Icon(Icons.list) : const Icon(Icons.bar_chart),
-                  )
-                  : Container(),
-                   GestureDetector(
-                    onTap:() => openTransactionFormModal(context),
-                    child: const Icon(Icons.add),
-                  )
-                ],
-              )
-          ),
-        child: bodyPage
-      )
-      : Scaffold(
-        appBar: AppBar(
-          title: const Text('Despesas Pessoais'),
-          actions: <Widget>[
-          if(isLandscape) 
-            IconButton(
-              icon: _showChart ? const Icon(Icons.list) : const Icon(Icons.bar_chart),
-              onPressed: (() {
-                setState(() => _showChart = !_showChart);
-              }),
+  ObstructingPreferredSizeWidget cupertinoNavigationBar(bool isLandscape){
+    return  CupertinoNavigationBar(
+      middle: const Text('Despesas Pessoais', style: TextStyle(color: Colors.black),),
+      trailing: 
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            isLandscape 
+            ? GestureDetector(
+              onTap:(() => setState(() => _showChart = !_showChart)),
+              child: _showChart ? const Icon(Icons.list) : const Icon(Icons.bar_chart),
+            )
+            : Container(),
+              GestureDetector(
+              onTap:() => openTransactionFormModal(context),
+              child: const Icon(Icons.add),
             )
           ],
-        ),
-        body: bodyPage,
-        floatingActionButton: Platform.isIOS
-        ? Container()
-        : FloatingActionButton(
-          child: const Icon(Icons.add),
-          onPressed: () => openTransactionFormModal(context),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      ); 
+        )
+    );
   }
+
+  Widget scaffold(bool isLandscape){
+    return Scaffold(
+      appBar: appBar(isLandscape),
+      body: bodyPage(isLandscape),
+      floatingActionButton: Platform.isIOS
+      ? Container()
+      : FloatingActionButton(
+        child: const Icon(Icons.add),
+        onPressed: () => openTransactionFormModal(context),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+    );    
+  }
+
+  PreferredSizeWidget appBar(bool isLandscape){
+  return AppBar(
+    title: const Text('Despesas Pessoais'),
+    actions:[
+      if(isLandscape)
+      IconButton(
+        icon: _showChart ? const Icon(Icons.list) : const Icon(Icons.bar_chart),
+        onPressed: (() => setState(() => _showChart = !_showChart)),
+      )
+    ],
+  );
+}
 }

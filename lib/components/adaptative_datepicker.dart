@@ -21,13 +21,13 @@ class AdaptativeDatePicker extends StatelessWidget {
       initialDate: DateTime.now(),
       firstDate: DateTime(2019),
       lastDate: DateTime.now()
-    ).then(((pickedDate){
-          if(pickedDate == null){return;}
-
+    ).then(
+      ((pickedDate){
+         if(pickedDate == null)return;
           onDate(pickedDate);
-          // setState(() {selectedDate = pickedDate;});
         }
-      ));
+      )
+    );
   }
 
   @override
@@ -47,9 +47,10 @@ class AdaptativeDatePicker extends StatelessWidget {
       height: 70,
       child: Row(
         children: [
-            Expanded(
-              child: Text("Data selecionada: ${DateFormat("dd/MM/y").format(selectedDate)}"
-              ),
+          Expanded(
+            child:
+               Text("Data selecionada: ${DateFormat("dd/MM/y").format(selectedDate)}"
+               ),
             ),
           TextButton(
             onPressed: ()=>buildShowDatePicker(context), 

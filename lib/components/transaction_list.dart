@@ -13,37 +13,34 @@ class TransactionList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return transactions.isEmpty 
-    ? LayoutBuilder(
+    ? layoutBuilder()
+    : listViewBuilder();
+  }
+
+  Widget layoutBuilder(){
+    return LayoutBuilder(
       builder: (context, constraints) {
         return Column(
           children:[
-            const SizedBox(
-              height: 20,
-            ),
-            Text(
-              "Nenhuma Transacao Cadastrada!",
-              style: Theme.of(context).textTheme.headline6,
-            ),
-            const SizedBox(
-              height: 20,
-            ),
+            const SizedBox(height: 20),
+            Text("Nenhuma Transacao Cadastrada!", style: Theme.of(context).textTheme.headline6),
+            const SizedBox(height: 20),
             SizedBox(
               height: constraints.maxHeight * 0.6,
-              child: Image.asset(
-                "assets/images/waiting.png",
-                fit:  BoxFit.cover,
-                )
+              child: Image.asset("assets/images/waiting.png", fit: BoxFit.cover),
             )
           ]
         );
       },
-    ) 
-    : ListView.builder(
+    );
+  }
+
+  Widget listViewBuilder(){
+    return ListView.builder(
       shrinkWrap: true,
       itemCount: transactions.length,
-      physics: NeverScrollableScrollPhysics(),
+      physics: const NeverScrollableScrollPhysics(),
       itemBuilder: (context, index) {
-        print(MediaQuery.of(context).size.width);
         final transaction = transactions[index];
           return Card(
             elevation: 5,
@@ -51,33 +48,42 @@ class TransactionList extends StatelessWidget {
               vertical: 8,
               horizontal: 5,
             ),
-            child: ListTile(
-              leading: CircleAvatar(
-                radius: 30,
-                child: Padding(
-                  padding: const EdgeInsets.all(6),
-                  child: FittedBox(
-                    child: Text("R\$${transaction.value}")
-                  ),
-                ),
-              ),
-              title: Text(
-                transaction.title, 
-                style: Theme.of(context).textTheme.headline6
-              ),
-              subtitle: Text(DateFormat('d MMM y').format(transaction.date)),
-              trailing: MediaQuery.of(context).size.width < 412
-              ?  IconButton(
-                  color: Theme.of(context).errorColor,
-                  icon: const Icon(Icons.delete),
-                  onPressed: (){
-                    removeTransaction(transaction.id);
-                  }
-                )
-              : TextButton(onPressed: () {} ,child: const Text("Excluir"))
-            ),
+            child: listTile(transaction, context)
           );
       },
     );
   }
+
+Widget listTile(Transaction transaction, BuildContext context){
+  return  ListTile(
+    leading: circleAvatar(transaction),
+    title: Text(
+      transaction.title, 
+      style: Theme.of(context).textTheme.headline6
+    ),
+    subtitle: Text(DateFormat('d MMM y').format(transaction.date)),
+    trailing: MediaQuery.of(context).size.width < 412
+    ? IconButton(
+        color: Theme.of(context).errorColor,
+        icon: const Icon(Icons.delete),
+        onPressed: (){
+          removeTransaction(transaction.id);
+        }
+      )
+    : TextButton(onPressed: () {} ,child: const Text("Excluir"))
+  ); 
+}
+
+Widget circleAvatar(Transaction transaction){
+  return CircleAvatar(
+    radius: 30,
+    child: Padding(
+      padding: const EdgeInsets.all(6),
+      child: FittedBox(
+        child: Text("R\$${transaction.value}")
+      ),
+    ),
+  );
+}
+
 }
