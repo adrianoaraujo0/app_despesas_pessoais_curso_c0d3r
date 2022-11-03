@@ -1,3 +1,4 @@
+import 'package:despesas_pessoais/components/transaction_item.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../models/transaction.dart';
@@ -5,10 +6,12 @@ import '../models/transaction.dart';
 class TransactionList extends StatelessWidget {
   final List<Transaction> transactions;
   Function(String) removeTransaction;
+
   TransactionList({
     required this.removeTransaction ,
     required this.transactions,
-    super.key});
+    super.key
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -42,48 +45,18 @@ class TransactionList extends StatelessWidget {
       physics: const NeverScrollableScrollPhysics(),
       itemBuilder: (context, index) {
         final transaction = transactions[index];
-          return Card(
-            elevation: 5,
-            margin: const EdgeInsets.symmetric(
-              vertical: 8,
-              horizontal: 5,
-            ),
-            child: listTile(transaction, context)
-          );
-      },
-    );
-  }
+          return TransactionItem(transaction: transaction, onRemove: removeTransaction,  key: GlobalObjectKey(transaction));
+          // return Card(
+          //   elevation: 5,
+          //   margin: const EdgeInsets.symmetric(
+          //     vertical: 8,
+          //     horizontal: 5,
+          //   ),
+          //   child: TransactionItem(onRemove: removeTransaction, transaction: transaction, key: ValueKey(transaction.id),)
+          // );
+        },
+      );
+    }
 
-Widget listTile(Transaction transaction, BuildContext context){
-  return  ListTile(
-    leading: circleAvatar(transaction),
-    title: Text(
-      transaction.title, 
-      style: Theme.of(context).textTheme.headline6
-    ),
-    subtitle: Text(DateFormat('d MMM y').format(transaction.date)),
-    trailing: MediaQuery.of(context).size.width < 412
-    ? IconButton(
-        color: Theme.of(context).errorColor,
-        icon: const Icon(Icons.delete),
-        onPressed: (){
-          removeTransaction(transaction.id);
-        }
-      )
-    : TextButton(onPressed: () {} ,child: const Text("Excluir"))
-  ); 
-}
-
-Widget circleAvatar(Transaction transaction){
-  return CircleAvatar(
-    radius: 30,
-    child: Padding(
-      padding: const EdgeInsets.all(6),
-      child: FittedBox(
-        child: Text("R\$${transaction.value}")
-      ),
-    ),
-  );
-}
 
 }
